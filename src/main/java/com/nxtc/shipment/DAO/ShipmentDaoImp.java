@@ -27,7 +27,7 @@ public class ShipmentDaoImp implements ShipmentDao {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		
 		StringBuilder selectQuery = new StringBuilder();
-		selectQuery.append(" select distinct(sh.shipment_id), sh.shipment_weight, sh.shipment_charge ," + 
+		selectQuery.append(" select distinct(sh.shipment_id), sh.shipment_weight, sh.shipment_charge , ss.status_message, " + 
 				 
 				" fromshipper.first_name as from_first_name , " + 
 				" fromshipper.last_name as from_last_name, " + 
@@ -47,18 +47,16 @@ public class ShipmentDaoImp implements ShipmentDao {
 				
 				" from shipment sh , " + 
 				" shipper fromshipper, shipper toshipper, " + 
-				" address fromaddr, address toaddr " + 
+				" address fromaddr, address toaddr " + ", shipment_status as ss  " +
 				" where sh.shipment_id =  ?" + 
 				" and sh.from_shipper = fromshipper.shipper_id " + 
 				" and sh.to_shipper = toshipper.shipper_id " + 
 				" and fromshipper.address_id = fromaddr.address_id " + 
-				" and toshipper.address_id = toshipper.address_id limit 1;");
+				" and toshipper.address_id = toshipper.address_id and sh.status_id = ss.status_id limit 1;");
 		
 		try 
 		{
-			
 			shipmentList = jdbcTemplate.query(selectQuery.toString(), new Object[] {shipmentId}, new ShipmentRowMapper());
-			
 		}catch(Exception e)
 		{
 			e.getMessage();
