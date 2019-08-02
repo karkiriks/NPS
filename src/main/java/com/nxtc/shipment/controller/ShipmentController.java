@@ -31,6 +31,12 @@ public class ShipmentController {
 		return shipmentService.getStatusMessage();
 	}
 	
+	@RequestMapping(value="/updateShipmentStatus", method = RequestMethod.PUT, consumes ="application/json")
+	public @ResponseBody String updateShipmentStatus(HttpServletResponse response, @RequestParam int shipmentId, String statusMessage)
+	{
+		return shipmentService.updateShipmentStatus(shipmentId, statusMessage);
+	}
+	
 	@RequestMapping(value="/updateShipment", method= RequestMethod.PUT, consumes="application/json")
 	public @ResponseBody  String updateShipmentById (HttpServletResponse response, @RequestBody Shipment shipment)
 	{

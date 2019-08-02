@@ -21,6 +21,11 @@ public class ShipmentServiceImpl implements ShipmentService {
 		// TODO Auto-generated method stub
 		return shipmentDao.getStatusMessage() ;
 	}
+	
+	public String updateShipmentStatus(int shipmentId, String statusMessage) {
+		
+		return shipmentDao.updateShipmentStatus(shipmentId, statusMessage);
+	}
 
 
 

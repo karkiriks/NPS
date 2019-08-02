@@ -13,6 +13,7 @@ import com.nxtc.shipment.model.Shipment;
 
 @Repository
 public class ShipmentDaoImp implements ShipmentDao {
+	private static final String String = null;
 	@Autowired
 	DataSource dataSource;
 	@Autowired
@@ -84,6 +85,22 @@ public class ShipmentDaoImp implements ShipmentDao {
 	    	e.getMessage();
 		}
 		return statusList;
+	}
+	@Override
+	public String updateShipmentStatus(int shipmentId, String statusMessage) {
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		StringBuilder updateQuery = new StringBuilder();
+		int a=0;
+		updateQuery.append("update shipment set status_id = (select status_id from shipment_status where status_message = ? ) where shipment_id = ?;");
+		
+		try
+		{
+		//	System.out.println(update shipment set status_id = (select status_id from shipment_status where status_message = pending pickup  ) where shipment_id = 10001;);
+			 a = jdbcTemplate.update(updateQuery.toString(),new Object[] {statusMessage, shipmentId});
+		}catch (Exception e) {
+			e.getMessage();
+		}
+		return +a+ "row updated";
 	}
 	
 	
