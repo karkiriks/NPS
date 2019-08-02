@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.nxtc.shipment.model.Shipment;
+import com.nxtc.shipment.model.Shipper;
 import com.nxtc.shipment.services.ShipmentService;
 
 @Controller
@@ -37,10 +38,11 @@ public class ShipmentController {
 		return shipmentService.updateShipmentStatus(shipmentId, statusMessage);
 	}
 	
-	@RequestMapping(value="/updateShipment", method= RequestMethod.PUT, consumes="application/json")
-	public @ResponseBody  String updateShipmentById (HttpServletResponse response, @RequestBody Shipment shipment)
+	@RequestMapping(value="/updateShipperInfo", method= RequestMethod.PUT, consumes="application/json")
+	public @ResponseBody  String updatefromShipperInfo (HttpServletResponse response, @RequestBody Shipper shipper , 
+			@RequestParam int shipmentId, @RequestParam String shipperType)
 	{
-		return null;
+		return shipmentService.updateShipperInfo(shipper, shipmentId, shipperType) ;
 	}
 	
 	@RequestMapping(value="/addShipment", method= RequestMethod.POST, consumes="application/json")
