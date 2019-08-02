@@ -6,6 +6,13 @@ public class Shipment {
 	private Shipper toShipper;
 	private double shipmentWeight;
 	private double shipmentCharge;
+	private String status;
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public int getShipmentId() {
 		return shipmentId;
 	}
