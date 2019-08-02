@@ -70,6 +70,21 @@ public class ShipmentDaoImp implements ShipmentDao {
 		}
 		
 	}
+	@Override
+	public List<String> getStatusMessage() {
+		List<String> statusList = new ArrayList<>();
+	    jdbcTemplate = new JdbcTemplate(dataSource);
+	    StringBuilder selectQuery = new StringBuilder();
+	    selectQuery.append("select status_message from shipment_status;");
+	    try
+	    {
+	    statusList=	jdbcTemplate.queryForList(selectQuery.toString(), String.class);
+	    }catch (Exception e) {
+			// TODO: handle exception
+	    	e.getMessage();
+		}
+		return statusList;
+	}
 	
 	
 

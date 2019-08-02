@@ -1,4 +1,6 @@
 package com.nxtc.shipment.services;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,12 @@ public class ShipmentServiceImpl implements ShipmentService {
 	public Shipment getShipmentById(int shipmentId) throws Exception {
 		return shipmentDao.getShipmentById(shipmentId);
 	}
+	@Override
+	public List<String> getStatusMessage() {
+		// TODO Auto-generated method stub
+		return shipmentDao.getStatusMessage() ;
+	}
+
 
 
 }

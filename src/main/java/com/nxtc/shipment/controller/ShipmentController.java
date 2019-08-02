@@ -1,5 +1,7 @@
 package com.nxtc.shipment.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,11 @@ public class ShipmentController {
 	public @ResponseBody  Shipment getShipmentById(HttpServletResponse response, @RequestParam int shipmentId) throws Exception
 	{
 		return shipmentService.getShipmentById(shipmentId);
+	}
+	@RequestMapping(value="/getStatusMessage", method= RequestMethod.GET, produces="application/json")
+	public @ResponseBody List<String> getStatusMessage(HttpServletResponse response)
+	{
+		return shipmentService.getStatusMessage();
 	}
 	
 	@RequestMapping(value="/updateShipment", method= RequestMethod.PUT, consumes="application/json")
