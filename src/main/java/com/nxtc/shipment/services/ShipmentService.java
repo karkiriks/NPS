@@ -9,6 +9,7 @@ public interface ShipmentService {
 	
 	public Shipment getShipmentById (int shipmentId) throws Exception;
 	public List<String> getStatusMessage();
+	public String updateShipmentStatus( int  shipmentId, String statusMessae);
 	
 
 }
