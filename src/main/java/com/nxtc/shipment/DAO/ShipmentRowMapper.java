@@ -23,6 +23,7 @@ public class ShipmentRowMapper implements RowMapper {
 		shipment.setShipmentId(rs.getInt("shipment_id"));
 		shipment.setShipmentCharge(rs.getDouble("shipment_charge"));
 		shipment.setShipmentWeight(rs.getDouble("shipment_weight"));
+		shipment.setStatus(rs.getString("status_message"));
 		
 		fromshipper.setFirstName(rs.getString("from_first_name"));
 		fromshipper.setLastName(rs.getString("from_last_name"));
