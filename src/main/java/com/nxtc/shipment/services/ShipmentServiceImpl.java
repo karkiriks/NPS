@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.nxtc.shipment.DAO.ShipmentDao;
 import com.nxtc.shipment.model.Shipment;
+import com.nxtc.shipment.model.Shipper;
 
 @Service
 public class ShipmentServiceImpl implements ShipmentService {
@@ -25,6 +26,12 @@ public class ShipmentServiceImpl implements ShipmentService {
 	public String updateShipmentStatus(int shipmentId, String statusMessage) {
 		
 		return shipmentDao.updateShipmentStatus(shipmentId, statusMessage);
+	}
+	@Override
+	public String updateShipperInfo(Shipper shipper, int shipmentId, String shipperType) {
+		
+		
+		return shipmentDao.updateShipperInfo(shipper, shipmentId, shipperType);
 	}
 
 
