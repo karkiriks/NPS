@@ -24,7 +24,10 @@ public class ShipmentController {
 	@RequestMapping(value="/getShipment", method= RequestMethod.GET, produces="application/json")
 	public @ResponseBody  Shipment getShipmentById(HttpServletResponse response, @RequestParam int shipmentId) throws Exception
 	{
-		return shipmentService.getShipmentById(shipmentId);
+		System.out.println(shipmentId);
+		 Shipment shipment = shipmentService.getShipmentById(shipmentId);
+		/* System.out.println(shipment.toString()); */
+		 return(shipment);
 	}
 	@RequestMapping(value="/getStatusMessage", method= RequestMethod.GET, produces="application/json")
 	public @ResponseBody List<String> getStatusMessage(HttpServletResponse response)
@@ -48,7 +51,7 @@ public class ShipmentController {
 	@RequestMapping(value="/addShipment", method= RequestMethod.POST, consumes="application/json")
 	public @ResponseBody  String addShipment (HttpServletResponse response, @RequestBody Shipment shipment)
 	{
-		return null;
+		return  shipmentService.addShipment(shipment);
 	}
 
 }

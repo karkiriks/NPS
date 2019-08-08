@@ -16,7 +16,7 @@ import com.nxtc.shipment.model.Shipper;
 
 @Repository
 public class ShipmentDaoImp implements ShipmentDao {
-	private static final String String = null;
+	
 	@Autowired
 	DataSource dataSource;
 	@Autowired
@@ -26,7 +26,7 @@ public class ShipmentDaoImp implements ShipmentDao {
 
 	@Override
 	public Shipment getShipmentById(int shipmentId) throws Exception {
-		//Shipment shipment = new Shipment();
+		Shipment shipment=new Shipment();
 		List<Shipment> shipmentList = new ArrayList<Shipment>();
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		
@@ -54,19 +54,26 @@ public class ShipmentDaoImp implements ShipmentDao {
 		
 		try 
 		{
+			System.out.println("Before Database" + shipmentId);
 			shipmentList = jdbcTemplate.query(selectQuery.toString(), new Object[] {shipmentId}, new ShipmentRowMapper());
+			System.out.println(selectQuery.toString());
+		//	System.out.println(shipment.toString());
+			System.out.println(shipmentList.size());
+			
+			//return shipment;
 		}catch(Exception e)
 		{
 			e.getMessage();
 		}
 		
-		if(shipmentList.size()>0) {
-			return shipmentList.get(0);
-		}else
+		if(shipmentList.size()==1)
 		{
-			return new Shipment();
+			return shipmentList.get(0);
 		}
-		
+		 else { 
+		 return new Shipment();
+		 }
+		 
 	}
 	@Override
 	public List<String> getStatusMessage() {
@@ -92,7 +99,7 @@ public class ShipmentDaoImp implements ShipmentDao {
 		
 		try
 		{
-		//	System.out.println(update shipment set status_id = (select status_id from shipment_status where status_message = pending pickup  ) where shipment_id = 10001;);
+		//	System.out.println("update shipment set status_id = (select status_id from shipment_status where status_message = pending pickup  ) where shipment_id = 10001;);
 			 a = jdbcTemplate.update(updateQuery.toString(),new Object[] {statusMessage, shipmentId});
 		}catch (Exception e) {
 			e.getMessage();
@@ -138,6 +145,53 @@ public class ShipmentDaoImp implements ShipmentDao {
 		return "failure";
 	}
 	
+	public String addShipment(Shipment shipment)
+	{
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		StringBuilder insertShipper= new StringBuilder();
+		StringBuilder insertShipment = new StringBuilder();
+		//StringBuilder insertShipmentStatus= new StringBuilder();
+		insertShipper.append("insert into shipper(`first_name`,`last_name`,`phone_number`,`street`,`city`,`state`,`zipcode`) values (?,?,?,?,?,?,?)");
+		StringBuilder queryForId = new StringBuilder();
+		StringBuilder queryForShipmentId = new StringBuilder();
+		queryForId.append(" select last_insert_id() limit 1 ; ");
+		int toShipperId =0;
+		int fromShipperId =0;
+		int latestShipmentID = 0;
+		try
+		{
+			jdbcTemplate.update(insertShipper.toString(), new Object[] {shipment.getFromShipper().getFirstName(), shipment.getFromShipper().getLastName(),shipment.getFromShipper().getPhoneNumber(),shipment.getFromShipper().getStreetName(),shipment.getFromShipper().getCity(), shipment.getFromShipper().getState(), shipment.getFromShipper().getZipCode()});
+			
+			 fromShipperId = jdbcTemplate.queryForObject(queryForId.toString(), Integer.class);
+			
+			jdbcTemplate.update(insertShipper.toString(), new Object[] {shipment.getToShipper().getFirstName(), shipment.getToShipper().getLastName(),shipment.getToShipper().getPhoneNumber(),shipment.getToShipper().getStreetName(),shipment.getToShipper().getCity(), shipment.getToShipper().getState(), shipment.getToShipper().getZipCode()});
+			
+			 toShipperId = jdbcTemplate.queryForObject(queryForId.toString(), Integer.class);
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	    insertShipment.append("insert into shipment(`from_shipper`,`to_shipper`,`shipment_weight`,`shipment_charge`) values( " + fromShipperId + ", " + toShipperId + " , ?,?)");
+	  
+	    queryForShipmentId.append(" select last_insert_id() from shipment limit 1 ; ");
+		try
+		{
+		int rows=	jdbcTemplate.update(insertShipment.toString(),new Object[] {shipment.getShipmentWeight(),shipment.getShipmentCharge()});
+			if(rows>0)
+			{
+				latestShipmentID = jdbcTemplate.queryForObject(queryForShipmentId.toString(), Integer.class);
+				return"success"+ rows +" row updated" + " shipment with "+ latestShipmentID + "was created";
+				
+			}
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		
+		return "Failure";
+	}
 	
 
 }
