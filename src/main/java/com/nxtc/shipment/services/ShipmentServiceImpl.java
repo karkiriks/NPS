@@ -34,6 +34,9 @@ public class ShipmentServiceImpl implements ShipmentService {
 		return shipmentDao.updateShipperInfo(shipper, shipmentId, shipperType);
 	}
 
-
+	public String addShipment(Shipment shipment)
+	{
+		return shipmentDao.addShipment(shipment);
+	}
 
 }

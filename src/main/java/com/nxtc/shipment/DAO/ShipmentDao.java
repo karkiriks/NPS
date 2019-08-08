@@ -10,6 +10,7 @@ public interface ShipmentDao {
 	public List<String> getStatusMessage();
 	public String updateShipmentStatus(int shipmentId, String statusMessage);
 	public String updateShipperInfo(Shipper shipper, int shipmentId, String shipperType);
+	public String addShipment (Shipment shipment);
 	
 
 }
