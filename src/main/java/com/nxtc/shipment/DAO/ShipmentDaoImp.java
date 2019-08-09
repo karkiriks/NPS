@@ -192,6 +192,28 @@ public class ShipmentDaoImp implements ShipmentDao {
 		
 		return "Failure";
 	}
+	@Override
+	public String updateShipmentById(int shipmentId, Shipment shipment) {
+		
+		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		StringBuilder updateQuery = new StringBuilder();
+		updateQuery.append("update shipment set shipment_weight= :shipmentWeight , shipment_charge = :shipmentCharge where shipment_id = " +shipmentId + ";");
+		parameters.addValue("shipmentWeight", shipment.getShipmentWeight() );
+		parameters.addValue("shipmentCharge", shipment.getShipmentCharge());
+		try
+		{
+			int rows =namedParameterJdbcTemplate.update(updateQuery.toString(), parameters);
+			if(rows>0)
+			{
+				return "success"+""+ rows +"updated";
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+		return "failure";
+	}
 	
 
 }
