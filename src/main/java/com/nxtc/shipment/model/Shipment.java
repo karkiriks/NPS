@@ -7,6 +7,13 @@ public class Shipment {
 	private double shipmentWeight;
 	private double shipmentCharge;
 	private String status;
+	
+	@Override
+	public String toString() {
+		return "Shipment [shipmentId=" + shipmentId + ", fromShipper=" + fromShipper + ", toShipper=" + toShipper
+				+ ", shipmentWeight=" + shipmentWeight + ", shipmentCharge=" + shipmentCharge + ", status=" + status
+				+ "]";
+	}
 	public String getStatus() {
 		return status;
 	}

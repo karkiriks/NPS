@@ -1,5 +1,7 @@
 package com.nxtc.shipment.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.nxtc.shipment.model.Shipment;
+import com.nxtc.shipment.model.Shipper;
 import com.nxtc.shipment.services.ShipmentService;
 
 @Controller
@@ -21,19 +24,40 @@ public class ShipmentController {
 	@RequestMapping(value="/getShipment", method= RequestMethod.GET, produces="application/json")
 	public @ResponseBody  Shipment getShipmentById(HttpServletResponse response, @RequestParam int shipmentId) throws Exception
 	{
-		return shipmentService.getShipmentById(shipmentId);
+		System.out.println(shipmentId);
+		 Shipment shipment = shipmentService.getShipmentById(shipmentId);
+		/* System.out.println(shipment.toString()); */
+		 return(shipment);
+	}
+	@RequestMapping(value="/getStatusMessage", method= RequestMethod.GET, produces="application/json")
+	public @ResponseBody List<String> getStatusMessage(HttpServletResponse response)
+	{
+		return shipmentService.getStatusMessage();
 	}
 	
-	@RequestMapping(value="/updateShipment", method= RequestMethod.PUT, consumes="application/json")
-	public @ResponseBody  String updateShipmentById (HttpServletResponse response, @RequestBody Shipment shipment)
+	@RequestMapping(value="/updateShipmentStatus", method = RequestMethod.PUT, consumes ="application/json")
+	public @ResponseBody String updateShipmentStatus(HttpServletResponse response, @RequestParam int shipmentId, String statusMessage)
 	{
-		return null;
+		return shipmentService.updateShipmentStatus(shipmentId, statusMessage);
+	}
+	
+	@RequestMapping(value="/updateShipperInfo", method= RequestMethod.PUT, consumes="application/json")
+	public @ResponseBody  String updatefromShipperInfo (HttpServletResponse response, @RequestBody Shipper shipper , 
+			@RequestParam int shipmentId, @RequestParam String shipperType)
+	{
+		return shipmentService.updateShipperInfo(shipper, shipmentId, shipperType) ;
 	}
 	
 	@RequestMapping(value="/addShipment", method= RequestMethod.POST, consumes="application/json")
 	public @ResponseBody  String addShipment (HttpServletResponse response, @RequestBody Shipment shipment)
 	{
-		return null;
+		return  shipmentService.addShipment(shipment);
+	}
+	
+	@RequestMapping(value="/updateShipmentById", method = RequestMethod.PUT, consumes="application/json")
+	public @ResponseBody String updateShipmentById(HttpServletResponse response, @RequestParam int shipmentId , @RequestBody Shipment shipment)
+	{
+		return shipmentService.updateShipmentById(shipmentId, shipment);
 	}
 
 }
