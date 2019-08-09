@@ -11,6 +11,7 @@ public interface ShipmentDao {
 	public String updateShipmentStatus(int shipmentId, String statusMessage);
 	public String updateShipperInfo(Shipper shipper, int shipmentId, String shipperType);
 	public String addShipment (Shipment shipment);
+	public String updateShipmentById(int shipmentId, Shipment shipment);
 	
 
 }

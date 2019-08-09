@@ -38,5 +38,10 @@ public class ShipmentServiceImpl implements ShipmentService {
 	{
 		return shipmentDao.addShipment(shipment);
 	}
+	@Override
+	public String updateShipmentById(int shipmentId, Shipment shipment) {
+		
+		return shipmentDao.updateShipmentById(shipmentId, shipment);
+	}
 
 }

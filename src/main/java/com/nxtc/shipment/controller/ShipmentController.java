@@ -53,5 +53,11 @@ public class ShipmentController {
 	{
 		return  shipmentService.addShipment(shipment);
 	}
+	
+	@RequestMapping(value="/updateShipmentById", method = RequestMethod.PUT, consumes="application/json")
+	public @ResponseBody String updateShipmentById(HttpServletResponse response, @RequestParam int shipmentId , @RequestBody Shipment shipment)
+	{
+		return shipmentService.updateShipmentById(shipmentId, shipment);
+	}
 
 }
