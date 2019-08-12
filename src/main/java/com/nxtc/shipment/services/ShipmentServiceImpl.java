@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nxtc.nps.tracking.model.TrackingHistory;
 import com.nxtc.shipment.DAO.ShipmentDao;
 import com.nxtc.shipment.model.Shipment;
 import com.nxtc.shipment.model.Shipper;
@@ -14,12 +15,12 @@ public class ShipmentServiceImpl implements ShipmentService {
 	@Autowired 
 	ShipmentDao shipmentDao;
 	@Override
-	public Shipment getShipmentById(int shipmentId) throws Exception {
+	public Shipment getShipmentById(String shipmentId) throws Exception {
 		return shipmentDao.getShipmentById(shipmentId);
 	}
 	@Override
 	public List<String> getStatusMessage() {
-		// TODO Auto-generated method stub
+		
 		return shipmentDao.getStatusMessage() ;
 	}
 	
@@ -43,5 +44,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 		
 		return shipmentDao.updateShipmentById(shipmentId, shipment);
 	}
+	
 
+	
 }

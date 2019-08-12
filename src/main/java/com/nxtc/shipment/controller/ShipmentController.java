@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.nxtc.nps.tracking.model.TrackingHistory;
 import com.nxtc.shipment.model.Shipment;
 import com.nxtc.shipment.model.Shipper;
 import com.nxtc.shipment.services.ShipmentService;
@@ -22,7 +23,7 @@ public class ShipmentController {
 	ShipmentService shipmentService;
 	
 	@RequestMapping(value="/getShipment", method= RequestMethod.GET, produces="application/json")
-	public @ResponseBody  Shipment getShipmentById(HttpServletResponse response, @RequestParam int shipmentId) throws Exception
+	public @ResponseBody  Shipment getShipmentById(HttpServletResponse response, @RequestParam String shipmentId) throws Exception
 	{
 		System.out.println(shipmentId);
 		 Shipment shipment = shipmentService.getShipmentById(shipmentId);
@@ -59,5 +60,8 @@ public class ShipmentController {
 	{
 		return shipmentService.updateShipmentById(shipmentId, shipment);
 	}
+	
+
+	
 
 }
