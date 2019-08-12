@@ -1,7 +1,7 @@
 package com.nxtc.shipment.model;
 
 public class Shipment {
-	private int shipmentId;
+	private String shipmentId;
 	private Shipper fromShipper;
 	private Shipper toShipper;
 	private double shipmentWeight;
@@ -20,10 +20,10 @@ public class Shipment {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public int getShipmentId() {
+	public String getShipmentId() {
 		return shipmentId;
 	}
-	public void setShipmentId(int shipmentId) {
+	public void setShipmentId(String shipmentId) {
 		this.shipmentId = shipmentId;
 	}
 	public Shipper getFromShipper() {
