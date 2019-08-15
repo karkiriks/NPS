@@ -1,4 +1,4 @@
-package com.nxtc.shipment.model;
+package com.nxtc.nps.shipment.model;
 
 public class Shipper {
 	private String firstName;

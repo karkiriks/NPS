@@ -1,4 +1,4 @@
-package com.nxtc.shipment.DAO;
+package com.nxtc.nps.shipment.DAO;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,9 +14,11 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.nxtc.nps.tracking.model.TrackingHistory;
-import com.nxtc.shipment.model.Shipment;
-import com.nxtc.shipment.model.Shipper;
+import com.nxtc.nps.delivery.model.ProofOfDelivery;
+import com.nxtc.nps.delivery.rowmapper.ProofOfDeliveryRowMapper;
+import com.nxtc.nps.delivery.service.EmailService;
+import com.nxtc.nps.shipment.model.Shipment;
+import com.nxtc.nps.shipment.model.Shipper;
 
 @Repository
 public class ShipmentDaoImp implements ShipmentDao {
@@ -25,6 +27,8 @@ public class ShipmentDaoImp implements ShipmentDao {
 	DataSource dataSource;
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+	@Autowired 
+	EmailService emailService;
 
 	@Override
 	public Shipment getShipmentById(String shipmentId) throws Exception {
@@ -76,22 +80,33 @@ public class ShipmentDaoImp implements ShipmentDao {
 	}
 
 	@Override
-	public String updateShipmentStatus(int shipmentId, String statusMessage) {
+	public String updateShipmentStatus(String shipmentId, String statusMessage) {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		StringBuilder updateQuery = new StringBuilder();
+		ProofOfDelivery pd;
 		int a = 0;
 		updateQuery.append(
-				"update shipment set status_id = (select status_id from shipment_status where status_message = ? ) where shipment_id = ?;");
+				"update shipment set status_id = (select status_id from shipment_status where status_message = ? ) where shipment_id = ?");
+		String getReceiverQuery = "select first_name,last_name,email from delivery_table where shipment_id = ?";
 
 		try {
-			// System.out.println("update shipment set status_id = (select status_id from
-			// shipment_status where status_message = pending pickup ) where shipment_id =
-			// 10001;);
 			a = jdbcTemplate.update(updateQuery.toString(), new Object[] { statusMessage, shipmentId });
+			pd = jdbcTemplate.queryForObject(getReceiverQuery, new Object[] {shipmentId} ,new ProofOfDeliveryRowMapper());
+			if(a>0 && statusMessage.equalsIgnoreCase("delivered") && pd != null) {
+				String subject = "Shipment " + shipmentId + " Delivery Notification";
+				StringBuilder messageBody = new StringBuilder();
+				
+				messageBody.append("HI " + pd.getFirstName() + " "+ pd.getLastName() + "\n");
+				messageBody.append("Your shipment with ID " + shipmentId + " has been Delivered\n");
+				messageBody.append("Thank you for using Nepal Postal Service \n");
+				messageBody.append("Customer is our first priority\n");
+				emailService.sendEmail(pd.getEmail(), subject, messageBody.toString());
+			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			e.getMessage();
 		}
-		return +a + "row updated";
+		return a + "row updated";
 	}
 
 	@Override

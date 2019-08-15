@@ -1,4 +1,4 @@
-package com.nxtc.tracking.DAO;
+package com.nxtc.nps.tracking.DAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
