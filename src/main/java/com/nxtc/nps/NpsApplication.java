@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan({"com.nxtc.*"})
+@ComponentScan({"com.nxtc.nps.*"})
 public class NpsApplication {
 
 	public static void main(String[] args) {

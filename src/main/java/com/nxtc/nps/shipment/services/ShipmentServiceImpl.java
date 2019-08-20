@@ -1,13 +1,13 @@
-package com.nxtc.shipment.services;
+package com.nxtc.nps.shipment.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nxtc.nps.shipment.DAO.ShipmentDao;
+import com.nxtc.nps.shipment.model.Shipment;
+import com.nxtc.nps.shipment.model.Shipper;
 import com.nxtc.nps.tracking.model.TrackingHistory;
-import com.nxtc.shipment.DAO.ShipmentDao;
-import com.nxtc.shipment.model.Shipment;
-import com.nxtc.shipment.model.Shipper;
 
 @Service
 public class ShipmentServiceImpl implements ShipmentService {
@@ -24,7 +24,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 		return shipmentDao.getStatusMessage() ;
 	}
 	
-	public String updateShipmentStatus(int shipmentId, String statusMessage) {
+	public String updateShipmentStatus(String shipmentId, String statusMessage) {
 		
 		return shipmentDao.updateShipmentStatus(shipmentId, statusMessage);
 	}

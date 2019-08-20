@@ -1,10 +1,11 @@
-package com.nxtc.shipment.DAO;
+package com.nxtc.nps.shipment.DAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
-import com.nxtc.shipment.model.Shipment;
-import com.nxtc.shipment.model.Shipper;
+
+import com.nxtc.nps.shipment.model.Shipment;
+import com.nxtc.nps.shipment.model.Shipper;
 
 public class ShipmentRowMapper implements RowMapper<Shipment> {
     

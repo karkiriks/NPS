@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nxtc.nps.tracking.DAO.TrackingHistoryDao;
 import com.nxtc.nps.tracking.model.TrackingHistory;
-import com.nxtc.tracking.DAO.TrackingHistoryDao;
 @Service
 
 public class TrackingServiceImpl implements TrackingHistoryService {

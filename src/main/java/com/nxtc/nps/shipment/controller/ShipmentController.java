@@ -1,4 +1,4 @@
-package com.nxtc.shipment.controller;
+package com.nxtc.nps.shipment.controller;
 
 import java.util.List;
 
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.nxtc.nps.shipment.model.Shipment;
+import com.nxtc.nps.shipment.model.Shipper;
+import com.nxtc.nps.shipment.services.ShipmentService;
 import com.nxtc.nps.tracking.model.TrackingHistory;
-import com.nxtc.shipment.model.Shipment;
-import com.nxtc.shipment.model.Shipper;
-import com.nxtc.shipment.services.ShipmentService;
 
 @Controller
 public class ShipmentController {
@@ -37,7 +37,7 @@ public class ShipmentController {
 	}
 	
 	@RequestMapping(value="/updateShipmentStatus", method = RequestMethod.PUT, consumes ="application/json")
-	public @ResponseBody String updateShipmentStatus(HttpServletResponse response, @RequestParam int shipmentId, String statusMessage)
+	public @ResponseBody String updateShipmentStatus(HttpServletResponse response, @RequestParam String shipmentId, String statusMessage)
 	{
 		return shipmentService.updateShipmentStatus(shipmentId, statusMessage);
 	}
