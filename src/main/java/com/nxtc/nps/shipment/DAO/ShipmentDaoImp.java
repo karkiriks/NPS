@@ -92,6 +92,9 @@ public class ShipmentDaoImp implements ShipmentDao {
 		try {
 			a = jdbcTemplate.update(updateQuery.toString(), new Object[] { statusMessage, shipmentId });
 			pd = jdbcTemplate.queryForObject(getReceiverQuery, new Object[] {shipmentId} ,new ProofOfDeliveryRowMapper());
+			System.out.println(a);
+			
+			
 			if(a>0 && statusMessage.equalsIgnoreCase("delivered") && pd != null) {
 				String subject = "Shipment " + shipmentId + " Delivery Notification";
 				StringBuilder messageBody = new StringBuilder();
