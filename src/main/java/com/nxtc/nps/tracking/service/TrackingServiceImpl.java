@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.nxtc.nps.tracking.DAO.TrackingHistoryDao;
 import com.nxtc.nps.tracking.model.TrackingHistory;
+
 @Service
 
 public class TrackingServiceImpl implements TrackingHistoryService {
@@ -15,14 +16,14 @@ public class TrackingServiceImpl implements TrackingHistoryService {
 
 	@Override
 	public String addTrackingHistory(String shipmentId, TrackingHistory trackingHistory) {
-		
-		return trackingHistoryDao.addTrackingHistory(shipmentId, trackingHistory) ;
+
+		return trackingHistoryDao.addTrackingHistory(shipmentId, trackingHistory);
 	}
 
 	@Override
 	public List<TrackingHistory> getTrackingHistoryByShipmentId(String shipmentId) {
-		
-		return trackingHistoryDao.getTrackingHistoryByShipmentId(shipmentId) ;
+
+		return trackingHistoryDao.getTrackingHistoryByShipmentId(shipmentId);
 	}
 
 }
