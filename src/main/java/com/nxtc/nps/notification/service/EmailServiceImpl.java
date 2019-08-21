@@ -1,4 +1,4 @@
-package com.nxtc.nps.delivery.service;
+package com.nxtc.nps.notification.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

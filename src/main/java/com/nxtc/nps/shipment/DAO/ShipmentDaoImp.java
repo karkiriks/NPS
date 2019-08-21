@@ -5,18 +5,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-
-import com.nxtc.nps.delivery.model.ProofOfDelivery;
-import com.nxtc.nps.delivery.rowmapper.ProofOfDeliveryRowMapper;
-import com.nxtc.nps.delivery.service.EmailService;
+import com.nxtc.nps.notification.service.EmailService;
+import com.nxtc.nps.notification.model.NotificationInfo;
+import com.nxtc.nps.notification.rowmapper.NotificationInfoRowMapper;
 import com.nxtc.nps.shipment.model.Shipment;
 import com.nxtc.nps.shipment.model.Shipper;
 
@@ -27,12 +24,11 @@ public class ShipmentDaoImp implements ShipmentDao {
 	DataSource dataSource;
 	@Autowired
 	JdbcTemplate jdbcTemplate;
-	@Autowired 
+	@Autowired
 	EmailService emailService;
 
 	@Override
 	public Shipment getShipmentById(String shipmentId) throws Exception {
-		Shipment shipment = new Shipment();
 		List<Shipment> shipmentList = new ArrayList<Shipment>();
 		jdbcTemplate = new JdbcTemplate(dataSource);
 
@@ -73,7 +69,6 @@ public class ShipmentDaoImp implements ShipmentDao {
 		try {
 			statusList = jdbcTemplate.queryForList(selectQuery.toString(), String.class);
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.getMessage();
 		}
 		return statusList;
@@ -83,28 +78,74 @@ public class ShipmentDaoImp implements ShipmentDao {
 	public String updateShipmentStatus(String shipmentId, String statusMessage) {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		StringBuilder updateQuery = new StringBuilder();
-		ProofOfDelivery pd;
+		List<NotificationInfo> receiverList;
 		int a = 0;
 		updateQuery.append(
 				"update shipment set status_id = (select status_id from shipment_status where status_message = ? ) where shipment_id = ?");
-		String getReceiverQuery = "select first_name,last_name,email from delivery_table where shipment_id = ?";
+		String getReceiverQuery = "select nt.*,ss.status_message as status_message from shipment sh, shipment_status ss, notification_table nt "
+				+ "where sh.shipment_id =  ? " + "and ss.status_message = ? " + "and sh.shipment_id = nt.shipment_id "
+				+ "and nt.status_id = ss.status_id;";
 
 		try {
 			a = jdbcTemplate.update(updateQuery.toString(), new Object[] { statusMessage, shipmentId });
-			pd = jdbcTemplate.queryForObject(getReceiverQuery, new Object[] {shipmentId} ,new ProofOfDeliveryRowMapper());
-			System.out.println(a);
-			
-			
-			if(a>0 && statusMessage.equalsIgnoreCase("delivered") && pd != null) {
-				String subject = "Shipment " + shipmentId + " Delivery Notification";
-				StringBuilder messageBody = new StringBuilder();
-				
-				messageBody.append("HI " + pd.getFirstName() + " "+ pd.getLastName() + "\n");
-				messageBody.append("Your shipment with ID " + shipmentId + " has been Delivered\n");
-				messageBody.append("Thank you for using Nepal Postal Service \n");
-				messageBody.append("Customer is our first priority\n");
-				emailService.sendEmail(pd.getEmail(), subject, messageBody.toString());
+			receiverList = jdbcTemplate.query(getReceiverQuery, new Object[] { shipmentId, statusMessage },
+					new NotificationInfoRowMapper());
+			if (receiverList.size() > 0) {
+				for (NotificationInfo item : receiverList) {
+					if (statusMessage.equalsIgnoreCase("Pending pickup")) {
+						StringBuilder messageBody = new StringBuilder();
+						String subject = "Shipment " + shipmentId + " Pending Pickup Notification";
+						messageBody.append("HI " + item.getFirstName() + " " + item.getLastName() + "\n");
+						messageBody.append("Your shipment with ID " + shipmentId + " is pending pickup\n");
+						messageBody.append("Thank you for using Nepal Postal Service \n");
+						messageBody.append("Customer is our first priority\n");
+						emailService.sendEmail(item.getEmail(), subject, messageBody.toString());
+
+					} else if (statusMessage.equalsIgnoreCase("In transit")) {
+						StringBuilder messageBody = new StringBuilder();
+						String subject = "Shipment " + shipmentId + " In transit Notification";
+						messageBody.append("HI " + item.getFirstName() + " " + item.getLastName() + "\n");
+						messageBody.append("Your shipment with ID " + shipmentId + " is in Transit\n");
+						messageBody.append("Thank you for using Nepal Postal Service \n");
+						messageBody.append("Customer is our first priority\n");
+						emailService.sendEmail(item.getEmail(), subject, messageBody.toString());
+					} else if (statusMessage.equalsIgnoreCase("Delivered")) {
+						StringBuilder messageBody = new StringBuilder();
+						String subject = "Shipment " + shipmentId + " Delivered Notification";
+						messageBody.append("HI " + item.getFirstName() + " " + item.getLastName() + "\n");
+						messageBody.append("Your shipment with ID " + shipmentId + " is delivered \n");
+						messageBody.append("Thank you for using Nepal Postal Service \n");
+						messageBody.append("Customer is our first priority\n");
+						emailService.sendEmail(item.getEmail(), subject, messageBody.toString());
+					} else if (statusMessage.equalsIgnoreCase("awaiting departure")) {
+						StringBuilder messageBody = new StringBuilder();
+						String subject = "Shipment " + shipmentId + " Awaiting Departure";
+						messageBody.append("HI " + item.getFirstName() + " " + item.getLastName() + "\n");
+						messageBody.append("Your shipment with ID " + shipmentId + " is awaiting departure \n");
+						messageBody.append("Thank you for using Nepal Postal Service \n");
+						messageBody.append("Customer is our first priority\n");
+						emailService.sendEmail(item.getEmail(), subject, messageBody.toString());
+					} else if (statusMessage.equalsIgnoreCase("Out of delivery")) {
+						StringBuilder messageBody = new StringBuilder();
+						String subject = "Shipment " + shipmentId + " Out Of Delivery";
+						messageBody.append("HI " + item.getFirstName() + " " + item.getLastName() + "\n");
+						messageBody.append("Your shipment with ID " + shipmentId + " is out of delivery \n");
+						messageBody.append("Thank you for using Nepal Postal Service \n");
+						messageBody.append("Customer is our first priority\n");
+						emailService.sendEmail(item.getEmail(), subject, messageBody.toString());
+
+					} else if (statusMessage.equalsIgnoreCase("return")) {
+						StringBuilder messageBody = new StringBuilder();
+						String subject = "Shipment " + shipmentId + " return";
+						messageBody.append("HI " + item.getFirstName() + " " + item.getLastName() + "\n");
+						messageBody.append("Your shipment with ID " + shipmentId + " is returning \n");
+						messageBody.append("Thank you for using Nepal Postal Service \n");
+						messageBody.append("Customer is our first priority\n");
+						emailService.sendEmail(item.getEmail(), subject, messageBody.toString());
+					}
+				}
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			e.getMessage();
@@ -114,7 +155,6 @@ public class ShipmentDaoImp implements ShipmentDao {
 
 	@Override
 	public String updateShipperInfo(Shipper shipper, int shipmentId, String shipperType) {
-		// Shipper shipper = new Shipper();
 		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		StringBuilder updateQuery = new StringBuilder();
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -153,7 +193,6 @@ public class ShipmentDaoImp implements ShipmentDao {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		StringBuilder insertShipper = new StringBuilder();
 		StringBuilder insertShipment = new StringBuilder();
-		// StringBuilder insertShipmentStatus= new StringBuilder();
 		insertShipper.append(
 				"insert into shipper(`first_name`,`last_name`,`phone_number`,`street`,`city`,`state`,`zipcode`,`create_date`) values (?,?,?,?,?,?,?,curdate())");
 		StringBuilder queryForId = new StringBuilder();
@@ -179,7 +218,6 @@ public class ShipmentDaoImp implements ShipmentDao {
 
 			toShipperId = jdbcTemplate.queryForObject(queryForId.toString(), Integer.class);
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		insertShipment.append(
@@ -195,7 +233,6 @@ public class ShipmentDaoImp implements ShipmentDao {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 
@@ -241,10 +278,5 @@ public class ShipmentDaoImp implements ShipmentDao {
 		return "" + epochTime;
 
 	}
-
-	/**
-	 *
-	 */
-	
 
 }

@@ -25,13 +25,11 @@ public class TrackingController {
 			@RequestBody TrackingHistory trackingHistory) {
 		return trackingHistoryService.addTrackingHistory(shipmentId, trackingHistory);
 	}
-	
-	@RequestMapping (value="/getTrackingHistoryByShipmentId", method = RequestMethod.GET, produces ="application/json")
-	public @ResponseBody List<TrackingHistory> getTrackingHistory (HttpServletResponse response, @RequestParam String shipmentId )
-	{
+
+	@RequestMapping(value = "/getTrackingHistoryByShipmentId", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<TrackingHistory> getTrackingHistory(HttpServletResponse response,
+			@RequestParam String shipmentId) {
 		return trackingHistoryService.getTrackingHistoryByShipmentId(shipmentId);
 	}
 
-	
 }
-

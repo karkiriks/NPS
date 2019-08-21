@@ -13,25 +13,24 @@ import com.nxtc.nps.tracking.model.TrackingHistory;
 
 @Repository
 public class TrackingHistoryDaoImp implements TrackingHistoryDao {
-	@Autowired 
+	@Autowired
 	DataSource dataSource;
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
 	@Override
 	public String addTrackingHistory(String shipmentId, TrackingHistory trackingHistory) {
-		
-		jdbcTemplate= new JdbcTemplate(dataSource);
+
+		jdbcTemplate = new JdbcTemplate(dataSource);
 		StringBuilder addQuery = new StringBuilder();
-		addQuery.append("insert into tracking_history (track_message , track_date , shipment_id) values (?,now(),?)"); 
-		try
-		{
-			jdbcTemplate.update(addQuery.toString(),new Object[] {trackingHistory.getTrackMessage(),shipmentId });
+		addQuery.append("insert into tracking_history (track_message , track_date , shipment_id) values (?,now(),?)");
+		try {
+			jdbcTemplate.update(addQuery.toString(), new Object[] { trackingHistory.getTrackMessage(), shipmentId });
 			return "success";
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return "failure";
 	}
 
@@ -40,20 +39,18 @@ public class TrackingHistoryDaoImp implements TrackingHistoryDao {
 		List<TrackingHistory> trackingList = new ArrayList<TrackingHistory>();
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		StringBuilder getQuery = new StringBuilder();
-		getQuery.append("select sh.shipment_id, th.track_message, th.track_date, ss.status_message from shipment sh, shipment_status ss, tracking_history th " + 
-				"where sh.shipment_id = ?" + 
-				"and ss.status_id = sh.status_id " + 
-				"and th.shipment_id = sh.shipment_id order by th.track_date desc; ");
-		try
-		{
-		trackingList = jdbcTemplate.query(getQuery.toString(), new Object[] {shipmentId}, new TrackingHistoryRowMapper());
+		getQuery.append(
+				"select sh.shipment_id, th.track_message, th.track_date, ss.status_message from shipment sh, shipment_status ss, tracking_history th "
+						+ "where sh.shipment_id = ?" + "and ss.status_id = sh.status_id "
+						+ "and th.shipment_id = sh.shipment_id order by th.track_date desc; ");
+		try {
+			trackingList = jdbcTemplate.query(getQuery.toString(), new Object[] { shipmentId },
+					new TrackingHistoryRowMapper());
 			return trackingList;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-		
+
 		return null;
 	}
 }
