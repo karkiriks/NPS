@@ -1,46 +1,49 @@
-package com.nxtc.shipment.services;
+package com.nxtc.nps.shipment.services;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nxtc.shipment.DAO.ShipmentDao;
-import com.nxtc.shipment.model.Shipment;
-import com.nxtc.shipment.model.Shipper;
+import com.nxtc.nps.shipment.DAO.ShipmentDao;
+import com.nxtc.nps.shipment.model.Shipment;
+import com.nxtc.nps.shipment.model.Shipper;
 
 @Service
 public class ShipmentServiceImpl implements ShipmentService {
 
-	@Autowired 
+	@Autowired
 	ShipmentDao shipmentDao;
+
 	@Override
-	public Shipment getShipmentById(int shipmentId) throws Exception {
+	public Shipment getShipmentById(String shipmentId) throws Exception {
 		return shipmentDao.getShipmentById(shipmentId);
 	}
+
 	@Override
 	public List<String> getStatusMessage() {
-		// TODO Auto-generated method stub
-		return shipmentDao.getStatusMessage() ;
+
+		return shipmentDao.getStatusMessage();
 	}
-	
-	public String updateShipmentStatus(int shipmentId, String statusMessage) {
-		
+
+	public String updateShipmentStatus(String shipmentId, String statusMessage) {
+
 		return shipmentDao.updateShipmentStatus(shipmentId, statusMessage);
 	}
+
 	@Override
 	public String updateShipperInfo(Shipper shipper, int shipmentId, String shipperType) {
-		
-		
+
 		return shipmentDao.updateShipperInfo(shipper, shipmentId, shipperType);
 	}
 
-	public String addShipment(Shipment shipment)
-	{
+	public String addShipment(Shipment shipment) {
 		return shipmentDao.addShipment(shipment);
 	}
+
 	@Override
 	public String updateShipmentById(int shipmentId, Shipment shipment) {
-		
+
 		return shipmentDao.updateShipmentById(shipmentId, shipment);
 	}
 

@@ -1,10 +1,11 @@
-package com.nxtc.shipment.DAO;
+package com.nxtc.nps.shipment.DAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
-import com.nxtc.shipment.model.Shipment;
-import com.nxtc.shipment.model.Shipper;
+
+import com.nxtc.nps.shipment.model.Shipment;
+import com.nxtc.nps.shipment.model.Shipper;
 
 public class ShipmentRowMapper implements RowMapper<Shipment> {
     
@@ -15,7 +16,7 @@ public class ShipmentRowMapper implements RowMapper<Shipment> {
 		Shipper fromshipper = new Shipper();
 		Shipper toShipper = new Shipper();
 		
-		shipment.setShipmentId(rs.getInt("shipment_id"));
+		shipment.setShipmentId(rs.getString("shipment_id"));
 		shipment.setShipmentCharge(rs.getDouble("shipment_charge"));
 		shipment.setShipmentWeight(rs.getDouble("shipment_weight"));
 		shipment.setStatus(rs.getString("status_message"));

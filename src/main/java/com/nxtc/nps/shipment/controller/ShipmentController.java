@@ -1,9 +1,8 @@
-package com.nxtc.shipment.controller;
+package com.nxtc.nps.shipment.controller;
 
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,10 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.nxtc.shipment.model.Shipment;
-import com.nxtc.shipment.model.Shipper;
-import com.nxtc.shipment.services.ShipmentService;
+import com.nxtc.nps.shipment.model.Shipment;
+import com.nxtc.nps.shipment.model.Shipper;
+import com.nxtc.nps.shipment.services.ShipmentService;
 
 @Controller
 public class ShipmentController {
@@ -22,11 +20,9 @@ public class ShipmentController {
 	ShipmentService shipmentService;
 	
 	@RequestMapping(value="/getShipment", method= RequestMethod.GET, produces="application/json")
-	public @ResponseBody  Shipment getShipmentById(HttpServletResponse response, @RequestParam int shipmentId) throws Exception
+	public @ResponseBody  Shipment getShipmentById(HttpServletResponse response, @RequestParam String shipmentId) throws Exception
 	{
-		System.out.println(shipmentId);
 		 Shipment shipment = shipmentService.getShipmentById(shipmentId);
-		/* System.out.println(shipment.toString()); */
 		 return(shipment);
 	}
 	@RequestMapping(value="/getStatusMessage", method= RequestMethod.GET, produces="application/json")
@@ -36,7 +32,7 @@ public class ShipmentController {
 	}
 	
 	@RequestMapping(value="/updateShipmentStatus", method = RequestMethod.PUT, consumes ="application/json")
-	public @ResponseBody String updateShipmentStatus(HttpServletResponse response, @RequestParam int shipmentId, String statusMessage)
+	public @ResponseBody String updateShipmentStatus(HttpServletResponse response, @RequestParam String shipmentId, String statusMessage)
 	{
 		return shipmentService.updateShipmentStatus(shipmentId, statusMessage);
 	}
@@ -59,5 +55,8 @@ public class ShipmentController {
 	{
 		return shipmentService.updateShipmentById(shipmentId, shipment);
 	}
+	
+
+	
 
 }
